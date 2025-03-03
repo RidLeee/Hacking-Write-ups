@@ -29,7 +29,7 @@ Using the above information we can use Hydra to bruteforce the password to SSH w
 
 Hydra has given us the username and password to login to SSH with.
 
-Logged in as lin we are immediatly given the first flag in user.txt
+Logged in as lin we are immediatley given the first flag in user.txt
 
 ![image](https://github.com/user-attachments/assets/1eada02b-d510-48bb-9156-f3b24105c4bf)
 
