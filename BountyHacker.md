@@ -1,32 +1,27 @@
-##  Bounty Hacker Write-up
+# Bounty Hacker Write-up
 
-## Initial Enumeration
+  An initial network scan gives us three possible ports.
 
+  #### $ nmap -sC -sV -oN 10.10.147.114
 
-  An initial network scan gives us some key information we can use to progress forward.
-
-  Of the three ports
-  1. Port 21: FTP With anonymous login.
-  2. Port 22: SSH
-  3. Port 80: HTTP
+  1. Port 21: ftp w/ anonymous login option
+  3. Port 22: ssh
+  4. Port 80: http
 
 ![image](https://github.com/user-attachments/assets/1c7fd2cb-1b5c-4351-b8c8-b62bd4920c3e)
 
 Opening the http page gives us a list of possible usernames we could use to login to one of the other services.
 
-1. Spike
-2. Jet
-3. Ed
-4. Edward
-5. Ein
-6. Faye
+![image](https://github.com/user-attachments/assets/b7e51f5a-e05e-499c-9e33-3273553f87ca)
 
-With nothing more available from enurmerating the webpage, I investigated by logging into the ftp server using anonymous, which shows two files we can download.
+Using gobuster to enumerate the server but found nothing of interest, including the possible usernames.
+
+Logging into the ftp server using anonymous there is two files we can download.
 
 ![image](https://github.com/user-attachments/assets/a8d88b1a-bb08-4212-b41f-6d93a9022f91)
 
-#### Opening task.txt is a short todo list written by lin. Giving another possible username for SSH.
-#### Opening locks.txt appears to be a list of possible passwords.
+task.txt is a short todo list written by lin. Giving another possible username for SSH.
+locks.txt appears to be a list of possible passwords.
 
 Using the above information we can use Hydra to bruteforce the password to SSH with the username and the possible passwords
 
