@@ -34,7 +34,7 @@ This reveals two key directories:
 
 The **Uploads** directory contains three files:
 - `meme.jpg` – A standard image file
-- `manifesto` – A text file containing a manifesto
+- `manifesto` – A text file containing a manifesto (What on earth?)
 - `dict.lst` – A potential password list
 
 ## Exploring the Secret Directory
@@ -50,7 +50,7 @@ We download `secretKey` and `dict.lst` for further analysis. Using John the Ripp
    sudo /usr/share/john/ssh2john.py secretKey > hashedkey
    ```
 
-2. Use `dict.lst` to brute-force the hashed key:
+2. Use `dict.lst` to brute-force password for the hashed key:
    ```bash
    sudo john hashedkey --wordlist=dict.lst
    ```
@@ -78,15 +78,12 @@ After entering the recovered password, we successfully gain access to the system
 
 ## Next Steps: Privilege Escalation
 
-At this stage, privilege escalation is required to gain further access. This is an area for further research and improvement.
+At this stage, privilege escalation is required to gain further access. This is an area I'm currently trying to improve, root access was gained but not without an explanation.
 
 ---
 ### TODO:
 - Improve Linux privilege escalation techniques
-- Research common privilege escalation methods such as SUID binaries, cron jobs, and kernel exploits
-- Practice enumeration with tools like `linpeas` and `pspy`
-
-This write-up outlines the steps taken to gain initial access to the machine. Further work is needed to achieve full system compromise through privilege escalation.
+- Learn linpeas and how it's transfer onto a machine
 
 
 
