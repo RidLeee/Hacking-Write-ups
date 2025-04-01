@@ -1,4 +1,4 @@
-# Hacking Challenge Write-Up Template
+# Anonymous Write-up
 
 ## Initial Enumeration
 
