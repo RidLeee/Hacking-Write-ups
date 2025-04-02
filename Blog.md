@@ -35,8 +35,9 @@ Given a simple blog page some important information is given. The webpage is a u
 wpscan --url blog.thm -e u
 ```
 
-Cutting out the unimportant information, there is two users found
+Cutting out the unimportant information, there is two users found and a specific version of WordPress (5.0).
 
+Usernames:
 1. kwheel
 2. bjoel
 
