@@ -22,26 +22,46 @@ Moving around the website three important things can be found.
 
 1. Upload profile picture (Can't use unless we are admin!)
 2. The admin email address: admin@sky.thm
+<br/><br/>
 ![image](https://github.com/user-attachments/assets/ede4905b-decc-4c73-a6ce-d51263151496)
-3. Reset Password feature.
+<br/><br/>
+4. Reset Password feature.
+<br/><br/>
 ![image](https://github.com/user-attachments/assets/66cb4b96-e919-4db7-ad66-8d8b3109071f)
+<br/><br/>
 
+The reset password feature autofills the relevant content. A request capture could give information on how to exploit this process.
 ### Webpage Password Reset
-
-Using burpsuite we may be able to capture a password reset request for another user, the admin account is a perfect candidate.
 
 ![image](https://github.com/user-attachments/assets/98adb69b-ed3b-477d-bf93-87894018be66)
 
-And with that, the admin@sky.thm account has been compromised! Using the profile upload feature only available to admin may be a way to get a shell running.
+Using burpsuite we may be able to capture a password reset request for another user, the admin account is a perfect candidate.
 
-Uploading a php reverse shell, the location can be found in /v2/profileimages/shell.file
+#### Reset Request
+- The form allows for manipulation by submitting a username (uname) to reset, a new password (npass), and a confirmation of the new password (cpass).
 
-Starting a nc listener, the system has been compromised as user www-data! Checking for other users reveals the system is using mongodb and mysql.
+#### Server Response:
+The server responds with confirmation of the password change!
 
-![image](https://github.com/user-attachments/assets/e7844299-64b8-4c51-a312-fe604d74e915)
+### Admin Exploitation
+> **The ability to reset a password for other accounts is a severe **authentication bypass** issue. The server didn't verify that the owner of the account being reset, meaning any user can reset a password by providing an email address.**
 
-### Shell Stabilization
+With the admin@sky.thm account compromised, there is some additional functionioalty to continue exploiting the server with. Using the **profile upload** feature only available to admin could provide a means of obtaining a **reverse shell**.
 
+Uploading a php reverse shell, the location can be found in /v2/profileimages/shell.file which is in a comment on the webpage.
+<br/><br/>
+1. Creating the payload for the reverse shell can be found at ![link](https://github.com/pentestmonkey/php-reverse-shell).
+2. Starting the listener to catch the shell
+<br/><br/>
+```bash
+nc -lvnp 8080
+```
+3. Open /v2/profileimages/shell.file in a browser to send the shell.
+
+And with that our reverse shell is up and running, we've gained access as www-data user.
+<br/><br/>
+## Shell Stabilization
+<br/><br/>
 ```bash
 python3 -c 'import pty;pty.spawn("/bin/bash")'
 CTRL+Z
@@ -49,18 +69,48 @@ stty raw -echo; fg
 export TERM=xterm
 ```
 ### First Flag
-
+The first flag requires no further privilege escalation!
 ![image](https://github.com/user-attachments/assets/e72c2721-d40c-4231-ada1-0d5383f6f59c)
 
 ## Privilege Escalation
+
+### System Enumeration
+
+Working through some basic information gathering, the /etc/passwd file shows the system is has MongoDB.
+
+![image](https://github.com/user-attachments/assets/e7844299-64b8-4c51-a312-fe604d74e915)
 
 ### Mongodb exploitation
 
 ```bash
 ss -tulnp
 ```
+ss stand for socket statistics and gives information about network sockets.
+Options Breakdown: -tulnp
+
+-t : Show TCP sockets
+-u : Show UDP sockets
+-l : Show only listening sockets (services waiting for incoming connections)
+-n : Show numeric addresses (don’t try to resolve hostnames or service names)
+-p : Show the process using the socket (requires root privileges to see all)
 
 ![image](https://github.com/user-attachments/assets/22ef5b29-8fd0-4885-82df-94e2458920d5)
+
+```bash
+show databases
+```
+1. admin
+2. backup
+3. config
+4. local
+
+```bash
+use backup
+```
+```bash
+show collections
+```
+Looking at the backup database, there is a collection containing user info for www-developer
 
 After switching users, we can begin gaining root privileges using LD_PRELOAD enviroment.
 
