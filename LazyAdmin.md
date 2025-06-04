@@ -48,6 +48,7 @@ More enumeration on this page gives results but the important results are
 
 
 /inc (Status: 301) [Size: 320] [--> http://10.10.166.211/content/inc/] -> A login page
+
 /as  (Status: 301) [Size: 319] [--> http://10.10.166.211/content/as/] -> The included content which contains a sql backup!
 
 Downloading and opening the SQL backup reveals information such as possible usernames and password hashes. Using crackstation, we find a match for an MD5 hash, possibly a password we could use.
